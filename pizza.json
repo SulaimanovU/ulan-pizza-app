@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "id": 1642414951899,
+            "name": "test",
+            "price": "price",
+            "info": "info",
+            "file": "1642414951889SAVE_20210410_114150 (1).jpg"
+        },
+        {
+            "id": 1642415195624,
+            "name": "test",
+            "price": "price",
+            "info": "info",
+            "file": "1642415195613SAVE_20210410_114150 (1).jpg"
+        },
+        {
+            "id": 1642415197572,
+            "name": "test",
+            "price": "price",
+            "info": "info",
+            "file": "1642415197559SAVE_20210410_114150 (1).jpg"
+        }
+    ]
+}
