@@ -31,7 +31,7 @@ app.post('/admin', (req, res, next) => {
         res.json({token: token})
     }
     else {
-        res.json({msg: 'incorrect credentials'})
+        res.json({msg: 'incorrect credentials', login: req.body.login, password: req.body.login })
     }
 })
 
