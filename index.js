@@ -4,10 +4,7 @@ let bodyParser = require('body-parser');
 let multer = require('multer')
 let fs = require('fs');
 let path = require('path')
-var cors = require('cors')
-
-app.use(cors())
-
+let cors = require('cors')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -21,6 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 let app = express();
+app.use(cors())
 let ADMIN = 'admin', PASS = 'secret';
 app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + "/public"));
