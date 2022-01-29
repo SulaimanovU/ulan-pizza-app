@@ -1,10 +1,13 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import bodyParser from 'body-parser';
-import multer from 'multer'
-import * as fs from 'fs/promises';
-import path from 'path';
-const __dirname = path.resolve();
+let express = require('express');
+let jwt = require('jsonwebtoken');
+let bodyParser = require('body-parser');
+let multer = require('multer')
+let fs = require('fs');
+let path = require('path')
+var cors = require('cors')
+
+app.use(cors())
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
