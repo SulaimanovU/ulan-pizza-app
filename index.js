@@ -1,10 +1,10 @@
-let express = require('express');
-let jwt = require('jsonwebtoken');
-let bodyParser = require('body-parser');
-let multer = require('multer')
-let fs = require('fs');
-let path = require('path')
-let cors = require('cors')
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import bodyParser from 'body-parser';
+import multer from 'multer'
+import * as fs from 'fs/promises';
+import path from 'path';
+const __dirname = path.resolve();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -18,7 +18,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 let app = express();
-app.use(cors())
 let ADMIN = 'admin', PASS = 'secret';
 app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + "/public"));
@@ -29,7 +28,7 @@ app.post('/admin', (req, res, next) => {
         res.json({token: token})
     }
     else {
-        res.json({msg: 'incorrect credentials', login: req.body.login, password: req.body.login })
+        res.json({msg: 'incorrect credentials'})
     }
 })
 
