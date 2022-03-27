@@ -43,7 +43,7 @@ app.post('/add/pizza', auth, upload.single('image'), async (req, res) => {
         return 0
     }
 
-    let data = await fs.readFile('./pizza.json');
+    let data = await fs.readFile('./public/pizza.json');
     let data2 = JSON.parse(data.toString());
 
     data2.data.push({
@@ -96,7 +96,7 @@ app.post('/add/drink', auth, upload.single('image'), async (req, res) => {
         return 0
     }
 
-    let data = await fs.readFile('./drink.json');
+    let data = await fs.readFile('./public/drink.json');
     let data2 = JSON.parse(data.toString());
 
     data2.data.push({
