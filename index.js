@@ -15,7 +15,7 @@ import auth from './middleware/auth';
 let app = express();
 app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + "/public"));
-
+// test kotka
 
 // SERVER METHODS
 app.get('/', (req, res) => {
