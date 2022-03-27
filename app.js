@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import * as fs from 'fs/promises';
 import path from 'path';
-const __dirname = path.resolve();
+import { fileURLToPath } from 'url';
 
 // IMPORTS INTERNALL PACKAGES
 import { upload } from './middleware/storage.js';
@@ -12,10 +12,10 @@ import config from './configs/config.js';
 import auth from './middleware/auth.js';
 
 // SERVER SETUP
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let app = express();
 app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + "/public"));
-
 
 // SERVER METHODS
 app.get('/', (req, res) => {
@@ -53,12 +53,12 @@ app.post('/add/pizza', auth, upload.single('image'), async (req, res) => {
         info,
         file,
     })
-    await fs.writeFile('./pizza.json', JSON.stringify(data2))
+    await fs.writeFile('./public/pizza.json', JSON.stringify(data2))
     res.json({msg: 'ok'})
 })
 
 app.get('/getall/pizza', async (req, res) => {
-    let data = await fs.readFile('./pizza.json');
+    let data = await fs.readFile('./public/pizza.json');
     let data2 = JSON.parse(data.toString());
 
     res.json({data: data2})
@@ -67,7 +67,7 @@ app.get('/getall/pizza', async (req, res) => {
 app.post('/delete/pizza/:id', auth, async (req, res) => {
     let id = req.params.id;
 
-    let data = await fs.readFile('./pizza.json');
+    let data = await fs.readFile('./public/pizza.json');
     let data2 = JSON.parse(data.toString());
     let data3 = {
         data: []
@@ -80,7 +80,7 @@ app.post('/delete/pizza/:id', auth, async (req, res) => {
         }
     });
 
-    await fs.writeFile('./pizza.json', JSON.stringify(data3))
+    await fs.writeFile('./public/pizza.json', JSON.stringify(data3))
 
     res.json({msg: "item deleted"})
 })
@@ -106,12 +106,12 @@ app.post('/add/drink', auth, upload.single('image'), async (req, res) => {
         info,
         file,
     })
-    await fs.writeFile('./drink.json', JSON.stringify(data2))
+    await fs.writeFile('./public/drink.json', JSON.stringify(data2))
     res.json({msg: 'ok'})
 })
 
 app.get('/getall/drink', async (req, res) => {
-    let data = await fs.readFile('./drink.json');
+    let data = await fs.readFile('./public/drink.json');
     let data2 = JSON.parse(data.toString());
 
     res.json({data: data2})
@@ -120,7 +120,7 @@ app.get('/getall/drink', async (req, res) => {
 app.post('/delete/drink/:id', auth, async (req, res) => {
     let id = req.params.id;
 
-    let data = await fs.readFile('./drink.json');
+    let data = await fs.readFile('./public/drink.json');
     let data2 = JSON.parse(data.toString());
     let data3 = {
         data: []
@@ -133,11 +133,11 @@ app.post('/delete/drink/:id', auth, async (req, res) => {
         }
     });
 
-    await fs.writeFile('./drink.json', JSON.stringify(data3))
+    await fs.writeFile('./public/drink.json', JSON.stringify(data3))
 
     res.json({msg: "item deleted"})
 })
 
-app.listen(process.env.PORT || 80, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`Example app listening at http://localhost:${3000}`)
 })
