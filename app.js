@@ -7,9 +7,9 @@ import path from 'path';
 const __dirname = path.resolve();
 
 // IMPORTS INTERNALL PACKAGES
-import upload from './middleware/storage';
-import { ADMIN, PASS } from './configs/config';
-import auth from './middleware/auth';
+import { upload } from './middleware/storage.js';
+import config from './configs/config.js';
+import auth from './middleware/auth.js';
 
 // SERVER SETUP
 let app = express();
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/admin', (req, res, next) => {
-    if (req.body.login === ADMIN && req.body.password === PASS) {
+    if (req.body.login === config.ADMIN && req.body.password === config.PASS) {
         let token = jwt.sign({ login: 'admin' }, 'secretkey')
         res.json({token: token})
     }
@@ -137,7 +137,6 @@ app.post('/delete/drink/:id', auth, async (req, res) => {
 
     res.json({msg: "item deleted"})
 })
-
 
 app.listen(process.env.PORT || 80, () => {
   console.log(`Example app listening at http://localhost:${3000}`)
