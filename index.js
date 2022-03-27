@@ -16,6 +16,7 @@ let app = express();
 app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + "/public"));
 // test kotka
+// test kotak
 
 // SERVER METHODS
 app.get('/', (req, res) => {
