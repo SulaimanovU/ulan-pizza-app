@@ -1,26 +1,26 @@
+// IMPORTS EXTERNALL PACKAGES
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
-import multer from 'multer'
 import * as fs from 'fs/promises';
 import path from 'path';
 const __dirname = path.resolve();
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './public')
-    },
-    filename: function (req, file, cb) {
-      cb(null, Date.now() + file.originalname)
-    }
-})
-  
-const upload = multer({ storage: storage })
+// IMPORTS INTERNALL PACKAGES
+import upload from './middleware/storage';
+import { ADMIN, PASS } from './configs/config';
+import auth from './middleware/auth';
 
+// SERVER SETUP
 let app = express();
-let ADMIN = 'admin', PASS = 'secret';
 app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + "/public"));
+
+
+// SERVER METHODS
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+})
 
 app.post('/admin', (req, res, next) => {
     if (req.body.login === ADMIN && req.body.password === PASS) {
@@ -32,30 +32,7 @@ app.post('/admin', (req, res, next) => {
     }
 })
 
-function admin(req, res, next){
-    let token = req.get('token');
-    if(!token) {
-        res.json({msg: 'token not provided'})
-    }
-   
-    const decoded = jwt.verify(token, 'secretkey');
-
-    if(!decoded.login === ADMIN) {
-        res.json({msg: 'not correct token provided'})
-    }
-    else {
-        next()
-    }
-
-    
-}
-
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.post('/add/pizza', admin, upload.single('image'), async (req, res) => {
+app.post('/add/pizza', auth, upload.single('image'), async (req, res) => {
     let name = req.body.name;
     let price = req.body.price;
     let info = req.body.info;
@@ -80,7 +57,6 @@ app.post('/add/pizza', admin, upload.single('image'), async (req, res) => {
     res.json({msg: 'ok'})
 })
 
-
 app.get('/getall/pizza', async (req, res) => {
     let data = await fs.readFile('./pizza.json');
     let data2 = JSON.parse(data.toString());
@@ -88,8 +64,7 @@ app.get('/getall/pizza', async (req, res) => {
     res.json({data: data2})
 })
 
-
-app.post('/delete/pizza/:id', admin, async (req, res) => {
+app.post('/delete/pizza/:id', auth, async (req, res) => {
     let id = req.params.id;
 
     let data = await fs.readFile('./pizza.json');
@@ -110,10 +85,7 @@ app.post('/delete/pizza/:id', admin, async (req, res) => {
     res.json({msg: "item deleted"})
 })
 
-
-
-
-app.post('/add/drink', admin, upload.single('image'), async (req, res) => {
+app.post('/add/drink', auth, upload.single('image'), async (req, res) => {
     let name = req.body.name;
     let price = req.body.price;
     let info = req.body.info;
@@ -138,7 +110,6 @@ app.post('/add/drink', admin, upload.single('image'), async (req, res) => {
     res.json({msg: 'ok'})
 })
 
-
 app.get('/getall/drink', async (req, res) => {
     let data = await fs.readFile('./drink.json');
     let data2 = JSON.parse(data.toString());
@@ -146,8 +117,7 @@ app.get('/getall/drink', async (req, res) => {
     res.json({data: data2})
 })
 
-
-app.post('/delete/drink/:id', admin, async (req, res) => {
+app.post('/delete/drink/:id', auth, async (req, res) => {
     let id = req.params.id;
 
     let data = await fs.readFile('./drink.json');
@@ -167,9 +137,6 @@ app.post('/delete/drink/:id', admin, async (req, res) => {
 
     res.json({msg: "item deleted"})
 })
-
-
-
 
 
 app.listen(process.env.PORT || 80, () => {
